@@ -9,7 +9,6 @@
 
 <body>
     <?php
-    //объявляем функцию
     function myFoo($arg1, $arg2)
     {
         $a = $arg1 + $arg2;
