@@ -3,6 +3,8 @@
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PostController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,16 +17,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 //9.1
-Route::get('/user/{id?}', function($id = 0) {
+Route::get('/user/{id?}', function ($id = 0) {
     return "Передан параметр $id";
 });
 
 //9.2
-Route::get('/{year}/{month}/{day}', function($year, $month, $day) {
+Route::get('/{year}/{month}/{day}', function ($year, $month, $day) {
     $date = $year . "-" . $month . "-" . $day;
     $daysOfWeek = array('Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота');
     $dayNumber = date('w', strtotime($date));
-    
+
     return $daysOfWeek[$dayNumber];
 })->where([
     'year' => '^(19|20)\d{2}$',
@@ -33,12 +35,12 @@ Route::get('/{year}/{month}/{day}', function($year, $month, $day) {
 ]);
 
 //9.3
-Route::get('names/{name}', function($name) {
-    $users = [ 
-        'user1' => 'city1', 
-        'user2' => 'city2', 
-        'user3' => 'city3', 
-        'user4' => 'city4', 
+Route::get('names/{name}', function ($name) {
+    $users = [
+        'user1' => 'city1',
+        'user2' => 'city2',
+        'user3' => 'city3',
+        'user4' => 'city4',
         'user5' => 'city5'
     ];
     if (array_key_exists($name, $users)) {
@@ -52,3 +54,21 @@ Route::get('names/{name}', function($name) {
 Route::get('/pages/show/{id}', [PageController::class, 'showOne']);
 
 Route::get('/pages/all', [PageController::class, 'showAll']);
+
+//14
+Route::get('/post/all/{order?}/{dir?}', [PostController::class, 'getAll'])
+    ->where('order', '^(id|title|date)?$')
+    ->where('dir', '^(asc|desc)?$')
+    ->name('posts.all');
+
+Route::get('/post/{id}', [PostController::class, 'getOne'])
+    ->where('id', '[0-9]+')
+    ->name('posts.one');
+
+Route::get('/post/new', [PostController::class, 'newPost'])->name('posts.new');
+Route::post('/post/store', [PostController::class, 'store'])->name('posts.store');
+
+Route::get('/post/edit/{id}', [PostController::class, 'editPost'])->name('posts.edit');
+Route::put('/post/update/{id}', [PostController::class, 'update'])->name('posts.update');
+
+Route::get('/post/del/{id}', [PostController::class, 'delPost'])->name('posts.del');
