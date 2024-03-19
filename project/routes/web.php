@@ -72,3 +72,8 @@ Route::get('/post/edit/{id}', [PostController::class, 'editPost'])->name('posts.
 Route::put('/post/update/{id}', [PostController::class, 'update'])->name('posts.update');
 
 Route::get('/post/del/{id}', [PostController::class, 'delPost'])->name('posts.del');
+
+
+use App\Http\Controllers\CountryController;
+
+Route::get('/countries', [CountryController::class, 'index']);
