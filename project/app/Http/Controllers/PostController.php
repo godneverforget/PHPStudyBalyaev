@@ -96,4 +96,91 @@ class PostController extends Controller
 
         return redirect()->route('posts.all')->with('success', 'Статья успешно удалена.');
     }
+
+    public function index()
+    {
+        $posts = [
+            [
+                "id" => 1,
+                "tittle" => "Name",
+                "desc" => " Description",
+                "text" => "Text",
+                "date" => "Date"
+            ],
+            [
+                "id" => 2,
+                "tittle" => "Name",
+                "desc" => " Description",
+                "text" => "Text",
+                "date" => "Date"
+            ]
+        ];
+
+        return $posts;
+    }
+
+    public function show($id)
+    {
+        $posts = [
+            [
+                "id" => 1,
+                "tittle" => "Name",
+                "desc" => " Description",
+                "text" => "Text",
+                "date" => "Date"
+            ],
+            [
+                "id" => 2,
+                "tittle" => "Name",
+                "desc" => " Description",
+                "text" => "Text",
+                "date" => "Date"
+            ]
+        ];
+
+        return $posts[$id-1];
+    }
+
+    public function store_(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required',
+            'text' => 'required',
+            'date' => 'required|date',
+        ]);
+
+        $post = Post::create($request->all());
+
+        return response()->json($post, 201);
+    }
+
+    public function update_(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required',
+            'text' => 'required',
+            'date' => 'required|date',
+        ]);
+
+        try {
+            $post = Post::findOrFail($id);
+            $post->update($request->all());
+            return response()->json($post, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $post = Post::findOrFail($id);
+            $post->delete();
+            return response()->json(['message' => 'Post deleted successfully'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+    }
 }

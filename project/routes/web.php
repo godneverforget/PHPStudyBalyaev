@@ -77,3 +77,16 @@ Route::get('/post/del/{id}', [PostController::class, 'delPost'])->name('posts.de
 use App\Http\Controllers\CountryController;
 
 Route::get('/countries', [CountryController::class, 'index']);
+
+
+
+//19-1
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\RoleController;
+
+Route::post('/user/{userId}/assign-role/{roleName}', [AdminUserController::class, 'assignRole']);
+Route::delete('/user/{userId}/revoke-role/{roleName}', [AdminUserController::class, 'revokeRole']);
+
+Route::post('/role/create', [RoleController::class, 'createRole']);
+Route::post('/role/{roleId}/give-permission/{permissionName}', [RoleController::class, 'givePermission']);
+Route::delete('/role/{roleId}/revoke-permission/{permissionName}', [RoleController::class, 'revokePermission']);
